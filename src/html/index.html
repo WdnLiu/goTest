@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carnatic Music Instrument Classification</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- HTMX Library -->
+    <script src="https://unpkg.com/htmx.org@1.5.0"></script>
+    <style>
+        /* CSS to vertically center the image */
+        .center-image {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px; /* Added margin for better spacing */
+        }
+
+        /* CSS to center the button */
+        .center-button {
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Carnatic Music Instrument Classification</h1>
+
+        <!-- Div to center the image -->
+        <div class="center-image">
+            <img src="output.png" alt="Description of the image">
+        </div>
+
+        <!-- Div to center the button -->
+        <div class="center-button">
+            <!-- Modified button to trigger the Go function -->
+            <button id="generate-json-btn" hx-get="/generate-json" class="btn btn-primary mt-3">Generate JSON</button>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.getElementById('generate-json-btn').addEventListener('click', function() {
+            // Manually trigger the button's htmx behavior
+            this.click();
+        });
+    </script>
+</body>
+</html>
