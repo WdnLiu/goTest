@@ -52,11 +52,10 @@ func HandleGenerateJSONAndCallPythonScript(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	// If the script generates an image, you might want to set appropriate headers
-	w.Header().Set("Content-Type", "image/jpeg")
-
 	// Optionally, you can send a success status code
 	w.WriteHeader(http.StatusOK)
+
+	fmt.Fprintf(w, `<script>window.location.reload(true);</script>`)
 }
 
 func GenerateAndWriteJSON(fileName string) error {

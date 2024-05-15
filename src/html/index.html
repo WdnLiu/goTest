@@ -29,13 +29,13 @@
 
         <!-- Div to center the image -->
         <div class="center-image">
-            <img id="output-image" src="output.png" alt="Intervals">
+            <img id="output-image" src="./output.png" alt="Intervals">
         </div>
 
         <!-- Div to center the button -->
         <div class="center-button">
             <!-- Modified button to trigger both Go function and Python script -->
-            <button id="generate-btn" hx-post="/generate-json" hx-trigger="click" hx-target="#output-image" hx-swap="outerHTML" class="btn btn-primary mt-3" onclick="reloadPage()">Generate Image</button>
+            <button id="generate-btn" hx-post="/generate-json" hx-trigger="click" hx-target="#output-image" hx-swap="outerHTML" class="btn btn-primary mt-3">Generate Image</button>
         </div>
     </div>
 
