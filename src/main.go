@@ -6,9 +6,25 @@ import (
 	"math/rand"
 	"net/http"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"time"
 )
+
+func main() {
+	// Serve static files from src/html directory
+	http.Handle("/", http.FileServer(http.Dir("src/html")))
+
+	// Handle requests for generating JSON data
+	http.HandleFunc("/generate-json", HandleGenerateJSONAndCallPythonScript)
+
+	// Handle requests to the root route
+
+	fmt.Println("Server started at :8080")
+	if err := http.ListenAndServe(":8080", nil); err != nil {
+		fmt.Println("Error starting server:", err)
+	}
+}
 
 type Instrument struct {
 	Name      string `json:"name"`
@@ -17,6 +33,30 @@ type Instrument struct {
 
 type CarnaticData struct {
 	Instruments []Instrument `json:"instruments"`
+}
+
+func HandleGenerateJSONAndCallPythonScript(w http.ResponseWriter, r *http.Request) {
+	// Generate JSON file
+	fileName := "input.json"
+	err := GenerateAndWriteJSON(fileName)
+	if err != nil {
+		http.Error(w, "Error generating JSON: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Call Python script
+	cmd := exec.Command("python3", "src/python/script.py", fileName)
+	err = cmd.Run() // Run the command without capturing output
+	if err != nil {
+		http.Error(w, "Error calling Python script: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// If the script generates an image, you might want to set appropriate headers
+	w.Header().Set("Content-Type", "image/jpeg")
+
+	// Optionally, you can send a success status code
+	w.WriteHeader(http.StatusOK)
 }
 
 func GenerateAndWriteJSON(fileName string) error {

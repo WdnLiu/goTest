@@ -5,14 +5,14 @@
       "intervals": [
         false,
         false,
-        true,
         false,
         true,
+        true,
+        true,
         false,
         false,
-        false,
-        false,
-        false
+        true,
+        true
       ]
     },
     {
@@ -23,56 +23,56 @@
         false,
         true,
         false,
-        true,
         false,
         true,
         true,
-        true
+        true,
+        false
       ]
     },
     {
       "name": "Flute",
       "intervals": [
-        false,
-        true,
-        false,
         true,
         true,
         true,
+        true,
+        true,
+        true,
+        true,
         false,
-        false,
-        false,
-        false
+        true,
+        true
       ]
     },
     {
       "name": "Violin",
       "intervals": [
+        false,
+        false,
+        false,
+        false,
         true,
+        false,
         true,
         false,
         false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        true
+        false
       ]
     },
     {
       "name": "Kanjira",
       "intervals": [
-        true,
-        false,
-        false,
-        true,
         false,
         true,
         false,
         false,
+        false,
+        false,
         true,
-        false
+        true,
+        true,
+        true
       ]
     },
     {
@@ -81,10 +81,10 @@
         true,
         true,
         false,
-        false,
+        true,
         true,
         false,
-        false,
+        true,
         false,
         true,
         false

@@ -29,13 +29,13 @@
 
         <!-- Div to center the image -->
         <div class="center-image">
-            <img src="output.png" alt="Description of the image">
+            <img id="output-image" src="output.png" alt="Intervals">
         </div>
 
         <!-- Div to center the button -->
         <div class="center-button">
-            <!-- Modified button to trigger the Go function -->
-            <button id="generate-json-btn" hx-get="/generate-json" class="btn btn-primary mt-3">Generate JSON</button>
+            <!-- Modified button to trigger both Go function and Python script -->
+            <button id="generate-btn" hx-post="/generate-json" hx-trigger="click" hx-target="#output-image" hx-swap="outerHTML" class="btn btn-primary mt-3" onclick="reloadPage()">Generate Image</button>
         </div>
     </div>
 
@@ -43,11 +43,11 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
     <script>
-        document.getElementById('generate-json-btn').addEventListener('click', function() {
-            // Manually trigger the button's htmx behavior
-            this.click();
-        });
+        function reloadPage() {
+            location.reload();
+        }
     </script>
 </body>
 </html>
