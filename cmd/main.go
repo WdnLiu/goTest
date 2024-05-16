@@ -12,8 +12,8 @@ import (
 )
 
 func main() {
-	// Serve static files from src/html directory
-	http.Handle("/", http.FileServer(http.Dir("src/html")))
+
+	http.Handle("/", http.FileServer(http.Dir("./public")))
 
 	// Handle requests for generating JSON data
 	http.HandleFunc("/generate-json", HandleGenerateJSONAndCallPythonScript)
@@ -45,7 +45,7 @@ func HandleGenerateJSONAndCallPythonScript(w http.ResponseWriter, r *http.Reques
 	}
 
 	// Call Python script
-	cmd := exec.Command("python3", "src/python/script.py", fileName)
+	cmd := exec.Command("python3", "lib/script.py", fileName)
 	err = cmd.Run() // Run the command without capturing output
 	if err != nil {
 		http.Error(w, "Error calling Python script: "+err.Error(), http.StatusInternalServerError)
@@ -55,7 +55,7 @@ func HandleGenerateJSONAndCallPythonScript(w http.ResponseWriter, r *http.Reques
 	// Optionally, you can send a success status code
 	w.WriteHeader(http.StatusOK)
 
-	fmt.Fprintf(w, `<script>window.location.reload(true);</script>`)
+	fmt.Fprintf(w, `<img id="output-image" src="./output.png?t=%d" alt="Intervals">`, time.Now().Unix())
 }
 
 func GenerateAndWriteJSON(fileName string) error {
@@ -144,9 +144,4 @@ func HandleGenerateJSON(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("JSON file successfully created"))
-}
-
-func IndexHandler(w http.ResponseWriter, r *http.Request) {
-	// Serve the HTML file
-	http.ServeFile(w, r, "src/html/index.html")
 }

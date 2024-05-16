@@ -6,8 +6,7 @@
     <title>Carnatic Music Instrument Classification</title>
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- HTMX Library -->
-    <script src="https://unpkg.com/htmx.org@1.5.0"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
     <style>
         /* CSS to vertically center the image */
         .center-image {
@@ -38,16 +37,5 @@
             <button id="generate-btn" hx-post="/generate-json" hx-trigger="click" hx-target="#output-image" hx-swap="outerHTML" class="btn btn-primary mt-3">Generate Image</button>
         </div>
     </div>
-
-    <!-- Bootstrap JS and dependencies -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-    <script>
-        function reloadPage() {
-            location.reload();
-        }
-    </script>
 </body>
 </html>

@@ -3,60 +3,60 @@
     {
       "name": "Veena",
       "intervals": [
-        false,
-        false,
-        false,
+        true,
         true,
         true,
         true,
         false,
+        true,
+        false,
         false,
         true,
-        true
+        false
       ]
     },
     {
       "name": "Mridangam",
       "intervals": [
-        false,
         true,
-        false,
         true,
         false,
         false,
+        false,
         true,
+        false,
+        false,
         true,
-        true,
-        false
+        true
       ]
     },
     {
       "name": "Flute",
       "intervals": [
         true,
-        true,
-        true,
-        true,
-        true,
-        true,
+        false,
         true,
         false,
         true,
-        true
+        false,
+        false,
+        false,
+        true,
+        false
       ]
     },
     {
       "name": "Violin",
       "intervals": [
         false,
-        false,
-        false,
-        false,
         true,
         false,
         true,
+        true,
         false,
-        false,
+        true,
+        true,
+        true,
         false
       ]
     },
@@ -64,28 +64,28 @@
       "name": "Kanjira",
       "intervals": [
         false,
-        true,
         false,
         false,
         false,
         false,
+        false,
+        false,
         true,
-        true,
-        true,
+        false,
         true
       ]
     },
     {
       "name": "Ghatam",
       "intervals": [
-        true,
-        true,
+        false,
+        false,
+        false,
         false,
         true,
         true,
-        false,
         true,
-        false,
+        true,
         true,
         false
       ]
