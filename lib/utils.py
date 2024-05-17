@@ -36,4 +36,4 @@ def save_boolean_matrix(bool_matrix, save_name="output.png"):
     plt.ylabel('Instruments')
     plt.yticks(np.arange(0, 2 * n, 2), np.arange(1, n + 1))
     plt.title('Result of instrument classification')
-    plt.savefig("src/html/" + save_name)
+    plt.savefig("public/" + save_name)
