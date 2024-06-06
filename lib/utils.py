@@ -1,6 +1,7 @@
 import matplotlib.colors as mcolors
 from matplotlib import patches, pyplot as plt
 import numpy as np
+import pandas as pd
 import json
 import plotly.graph_objects as go
 
@@ -57,13 +58,27 @@ def save_boolean_matrix(bool_matrix, save_name="output.png"):
     # Create the plot
     plt.imshow(matrix_with_spacing, cmap=cmap, interpolation='nearest', aspect='auto')
     
+    timestep = 0.1
+    xt = np.arange(0, matrix_with_spacing.shape[1], 5/timestep) # ticks to replace 
+    x = np.array([x*timestep for x in xt]) # convert number of element sequence to seconds
+    x = x/60 # ticks measured in minutes
+    
+    t = pd.to_datetime(x, unit='m') # convert to datetime format
+
+    t_format = [f'{x.minute}:{x.second}' for x in t] # convert to desired presentation format
+
     # Set the x-axis and y-axis labels
     plt.xlabel('Time')
     plt.ylabel('Instruments')
     
     # Set the y-ticks to the instrument names
-    plt.yticks(np.arange(0, 2 * n, 2), instrument_names)
+    y_repl = np.arange(0, 2 * n, 2)
+    # y_repl = [0,2,4,8]
+    # instrument names = ['Voice', 'Violin', 'Mridangam', 'Ghatam']
+    plt.yticks(y_repl, instrument_names)
     
+    plt.xticks(xt, t_format, rotation=45) # (ticks to replace, what to replace them with)
+
     # Set the title of the plot
     plt.title('Result of Instrument Classification')
     

@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"math/rand"
 	"net/http"
 	"os"
@@ -17,6 +18,7 @@ func main() {
 
 	// Handle requests for generating JSON data
 	http.HandleFunc("/generate-json", HandleGenerateJSONAndCallPythonScript)
+	http.HandleFunc("/upload", uploadHandler)
 
 	// Handle requests to the root route
 
@@ -68,6 +70,45 @@ func HandleGenerateJSONAndCallPythonScript(w http.ResponseWriter, r *http.Reques
 		</div>`, time.Now().Unix(), time.Now().Unix())
 
 	fmt.Fprint(w, response)
+}
+
+func uploadHandler(w http.ResponseWriter, r *http.Request) {
+
+	if r.Method != "POST" {
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		return
+	}
+
+	// Parse the multipart form
+	err := r.ParseMultipartForm(20 << 20) // 10 MB limit
+	if err != nil {
+		http.Error(w, "Failed to parse form", http.StatusBadRequest)
+		fmt.Print(err)
+		return
+	}
+
+	// Get the uploaded file
+	file, _, err := r.FormFile("file")
+	if err != nil {
+		http.Error(w, "Failed to retrieve file", http.StatusBadRequest)
+		fmt.Println(err)
+		return
+	}
+	defer file.Close()
+	// Create the destination file with the name inputAudio.wav in the root directory
+	dst, err := os.Create("./inputAudio.mp3")
+	if err != nil {
+		http.Error(w, "Failed to create file", http.StatusInternalServerError)
+		return
+	}
+	defer dst.Close()
+
+	// Copy the uploaded file to the destination
+	if _, err := io.Copy(dst, file); err != nil {
+		http.Error(w, "Failed to save file", http.StatusInternalServerError)
+		return
+	}
+	fmt.Fprintf(w, "File uploaded successfully: inputAudio.mp3")
 }
 
 // generateRandomBoolArray generates an array of random boolean values
