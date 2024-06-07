@@ -36,6 +36,7 @@
 <body>
     <div class="container mt-5">
         <h1 class="text-center">Carnatic Music Instrument Classification</h1>
+        <div class="text-center subtitle">Adrià León, Jinsong Liu, Laia Marinel·lo, Juande Gutiérrez and Raquel Maldonado</div>
 
         <div class="audio-container">
             <audio controls>
@@ -55,6 +56,9 @@
         <div class="center-button">
             <!-- Modified button to trigger both Go function and Python script -->
             <button id="generate-btn" hx-post="/generate-json" hx-trigger="click" hx-target="#output-images" hx-swap="outerHTML" class="btn btn-primary mt-3">Generate Image</button>
+        </div>
+        <div class="center-button">
+            <a id="download-btn" href="./output.png" download="output.png" class="btn btn-secondary mt-3">Download Image</a>
         </div>
         <div class="container mt-5 p-4">
             <h1 class="mb-4">Upload File</h1>

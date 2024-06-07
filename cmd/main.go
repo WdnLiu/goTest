@@ -58,7 +58,7 @@ func HandleGenerateJSONAndCallPythonScript(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	// Optionally, you can send a success status code
+	// Send a success status code
 	w.WriteHeader(http.StatusOK)
 
 	response := fmt.Sprintf(`
@@ -67,6 +67,9 @@ func HandleGenerateJSONAndCallPythonScript(w http.ResponseWriter, r *http.Reques
 				<img id="output-image" src="./output.png?t=%d" alt="Intervals">
 			</a>
 			<img id="sound-wave" src="./sound_wave.png?t=%d" alt="sound_wave">
+		</div>
+		<div class="center-button">
+			<a id="download-btn" href="./output.png" download="output.png" class="btn btn-secondary mt-3">Download Image</a>
 		</div>`, time.Now().Unix(), time.Now().Unix())
 
 	fmt.Fprint(w, response)
