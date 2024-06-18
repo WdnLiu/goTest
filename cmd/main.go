@@ -62,14 +62,14 @@ func HandleGenerateJSONAndCallPythonScript(w http.ResponseWriter, r *http.Reques
 	w.WriteHeader(http.StatusOK)
 
 	response := fmt.Sprintf(`
-		<div id="output-images" class="image-container">
-			<a href="./output.html">
-				<img id="output-image" src="./output.png?t=%d" alt="Intervals">
+		<div id="output-content" class="text-center">
+			<a href="./output.html" target="_blank" rel="noopener noreferrer">
+				<img id="output-image" src="./output.png?t=%d" alt="Intervals" class="img-fluid">
 			</a>
-			<img id="sound-wave" src="./sound_wave.png?t=%d" alt="sound_wave">
-		</div>
-		<div class="center-button">
-			<a id="download-btn" href="./output.png" download="output.png" class="btn btn-secondary mt-3">Download Image</a>
+			<img id="sound-wave" src="./sound_wave.png?t=%d" alt="sound_wave" class="img-fluid">
+			<div class="center-button">
+				<a id="download-btn" href="./output.png" download="output.png" class="btn btn-secondary mt-3">Download Image</a>
+			</div>
 		</div>`, time.Now().Unix(), time.Now().Unix())
 
 	fmt.Fprint(w, response)

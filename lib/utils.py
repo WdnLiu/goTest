@@ -1,6 +1,6 @@
-import matplotlib.colors as mcolors
-from matplotlib import patches, pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
 import pandas as pd
 import json
 import plotly.graph_objects as go
@@ -49,23 +49,29 @@ def plot_audio_from_json(json_file, save_name):
 def save_boolean_matrix(bool_matrix, save_name="output.png"):
     n, m = bool_matrix.shape
     # Create a new matrix with spacing between the original matrix rows
-    matrix_with_spacing = np.zeros((n*2, m), dtype=bool)
-    matrix_with_spacing[::2] = bool_matrix
+    matrix_with_spacing = np.zeros((n*2, m), dtype=int)
+    matrix_with_spacing[::2] = bool_matrix * np.arange(1, n+1).reshape(n, 1)
     
-    # Define the colormap
-    cmap = mcolors.ListedColormap(['white', 'darkgrey'])
+    # Define the colormap: the first color for the background (white), and the rest for instruments
+    background_color = 'white'
+    instrument_colors = ['red', 'green', 'blue', 'purple', 'orange', 'yellow', 'cyan', 'magenta']
+    colors = [background_color] + instrument_colors[:n]
+    cmap = mcolors.ListedColormap(colors)
     
     # Create the plot
     plt.imshow(matrix_with_spacing, cmap=cmap, interpolation='nearest', aspect='auto')
     
-    timestep = 0.1
-    xt = np.arange(0, matrix_with_spacing.shape[1], 5/timestep) # ticks to replace 
-    x = np.array([x*timestep for x in xt]) # convert number of element sequence to seconds
-    x = x/60 # ticks measured in minutes
-    
-    t = pd.to_datetime(x, unit='m') # convert to datetime format
+    timestep = 0.1  # assuming timestep is 0.1 seconds
+    total_time_seconds = m * timestep
+    total_time_minutes = total_time_seconds / 60
 
-    t_format = [f'{x.minute}:{x.second}' for x in t] # convert to desired presentation format
+    # Calculate the x-ticks for every minute
+    xt = np.arange(0, m, 60 / timestep)
+    x = xt * timestep / 60  # convert ticks to minutes
+
+    # Generate time labels in 'minute:second' format
+    t = pd.to_datetime(x, unit='m')
+    t_format = [f'{time.minute}:{time.second:02d}' for time in t]
 
     # Set the x-axis and y-axis labels
     plt.xlabel('Time')
@@ -73,11 +79,10 @@ def save_boolean_matrix(bool_matrix, save_name="output.png"):
     
     # Set the y-ticks to the instrument names
     y_repl = np.arange(0, 2 * n, 2)
-    # y_repl = [0,2,4,8]
-    # instrument names = ['Voice', 'Violin', 'Mridangam', 'Ghatam']
     plt.yticks(y_repl, instrument_names)
     
-    plt.xticks(xt, t_format, rotation=45) # (ticks to replace, what to replace them with)
+    # Set the x-ticks with one-minute intervals
+    plt.xticks(xt, t_format, rotation=45)
 
     # Set the title of the plot
     plt.title('Result of Instrument Classification')
@@ -89,36 +94,61 @@ def save_boolean_matrix(bool_matrix, save_name="output.png"):
 def save_boolean_matrix_interactive(bool_matrix, save_name="output.html"):
     n, m = bool_matrix.shape
     # Create a new matrix with spacing between the original matrix rows
-    matrix_with_spacing = np.zeros((n*2, m), dtype=bool)
-    matrix_with_spacing[::2] = bool_matrix
+    matrix_with_spacing = np.zeros((n*2, m), dtype=int)
+    matrix_with_spacing[::2] = bool_matrix * np.arange(1, n+1).reshape(n, 1)
     
-    # Define the colormap
-    cmap = ['white', 'darkgrey']
+    # Define the colormap: the first color for the background (white), and the rest for instruments
+    background_color = 'white'
+    instrument_colors = ['red', 'green', 'blue', 'purple']
+    colors = [background_color] + instrument_colors[:n]
     
-    # Create the figure
-    fig = go.Figure()
+    # Create a custom colorscale for the heatmap
+    colorscale = [(0, background_color)]
+    for i in range(1, n+1):
+        colorscale.append((i/(n), instrument_colors[i-1]))
+    colorscale.append((1, instrument_colors[-1]))  # Ensure the last color is included
 
-    # Add rectangles for each True value in the matrix
-    for i in range(n):
-        for j in range(m):
-            if matrix_with_spacing[i * 2, j]:
-                fig.add_shape(
-                    type="rect",
-                    x0=j,
-                    y0=i * 2,
-                    x1=j + 1,
-                    y1=i * 2 + 1,
-                    fillcolor=cmap[1],
-                    line=dict(width=0),
-                )
-    
+    # Create the heatmap
+    fig = go.Figure(data=go.Heatmap(
+        z=matrix_with_spacing,
+        colorscale=colorscale,
+        showscale=False,
+        zmin=0,
+        zmax=n
+    ))
+
+    # Calculate the x-ticks for every minute
+    timestep = 0.1  # assuming timestep is 0.1 seconds
+    total_time_seconds = m * timestep
+    total_time_minutes = total_time_seconds / 60
+
+    xt = np.arange(0, m, 60 / timestep)
+    x = xt * timestep / 60  # convert ticks to minutes
+
+    # Generate time labels in 'minute:second' format
+    t = pd.to_datetime(x, unit='m')
+    t_format = [f'{time.minute}:{time.second:02d}' for time in t]
+
     # Set the layout
     fig.update_layout(
         title='Result of Instrument Classification',
-        xaxis=dict(title='Timestamps'),
-        yaxis=dict(title='Instruments', tickmode='array', tickvals=list(range(0, 2 * n, 2)), ticktext=instrument_names),
-        yaxis_autorange='reversed',
-        showlegend=False
+        xaxis=dict(
+            title='Time',
+            tickmode='array',
+            tickvals=xt,
+            ticktext=t_format,
+            tickangle=45
+        ),
+        yaxis=dict(
+            title='Instruments',
+            tickmode='array',
+            tickvals=list(range(0, 2 * n, 2)),
+            ticktext=instrument_names,
+            autorange='reversed'
+        ),
+        showlegend=False,
+        height=600,
+        width=1000
     )
 
     # Save the plot to an HTML file
@@ -139,7 +169,7 @@ def generate_waveform(file_name, save_name="output.html"):
 
     # Plot the sound wave
     plt.figure(figsize=(10, 4))
-    plt.plot(time, amplitudes, label='Sound Wave')
+    plt.plot(time, amplitudes)
     plt.xlabel('Time')
     plt.ylabel('Amplitude')
     plt.title('Sound Wave Visualization')

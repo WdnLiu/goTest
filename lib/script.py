@@ -9,6 +9,6 @@ bool_matrix = utils.parse_json_file(sys.argv[1])
 
 utils.save_boolean_matrix(bool_matrix)
 
-# utils.save_boolean_matrix2(bool_matrix, "output2.png")
-# utils.save_boolean_matrix_interactive(bool_matrix)
+utils.save_boolean_matrix_interactive(bool_matrix)
+
 utils.generate_waveform(sys.argv[1], bool_matrix)
